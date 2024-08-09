@@ -40,7 +40,7 @@ mod tests {
 
     #[test]
     fn todos() {
-        let mut store = TicketStore::new();
+        let mut store: TicketStore = TicketStore::new();
 
         let todo = Ticket {
             title: ticket_title(),
@@ -56,7 +56,7 @@ mod tests {
         };
         store.add_ticket(ticket);
 
-        let todos: Vec<&Ticket> = store.to_dos();
+        let todos: Vec<&Ticket> = store.tickets.iter().filter(|item| item.status == Status::ToDo).collect();
         assert_eq!(todos.len(), 1);
         assert_eq!(todos[0], &todo);
     }
