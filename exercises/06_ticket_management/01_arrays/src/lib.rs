@@ -1,7 +1,9 @@
 // TODO: Flesh out the `WeekTemperatures` struct and its method implementations to pass the tests.
 
+use std::{num::Saturating, ops::{Index, IndexMut, SubAssign}};
+
 pub struct WeekTemperatures {
-    // TODO
+    temperatures: [Option<i32>; 7],
 }
 
 pub enum Weekday {
@@ -14,17 +16,49 @@ pub enum Weekday {
     Sunday,
 }
 
+impl Index<Weekday> for WeekTemperatures{
+    type Output = Option<i32>;
+    fn index(&self, index: Weekday) -> &Self::Output {
+        match index{
+            Weekday::Monday => &self.temperatures[0],
+            Weekday::Tuesday => &self.temperatures[1],
+            Weekday::Wednesday => &self.temperatures[2],
+            Weekday::Thursday => &self.temperatures[3],
+            Weekday::Friday => &self.temperatures[4],
+            Weekday::Saturday => &self.temperatures[5],
+            Weekday::Sunday => &self.temperatures[6]
+        }
+    }
+}
+
+impl IndexMut<Weekday> for WeekTemperatures{
+    fn index_mut(&mut self, index: Weekday) -> &mut Self::Output {
+        match index{
+            Weekday::Monday => &mut self.temperatures[0],
+            Weekday::Tuesday => &mut self.temperatures[1],
+            Weekday::Wednesday => &mut self.temperatures[2],
+            Weekday::Thursday => &mut self.temperatures[3],
+            Weekday::Friday => &mut self.temperatures[4],
+            Weekday::Saturday => &mut self.temperatures[5],
+            Weekday::Sunday => &mut self.temperatures[6]
+        }
+    }
+}
+
+
 impl WeekTemperatures {
     pub fn new() -> Self {
-        todo!()
+        WeekTemperatures {
+            temperatures: [None, None, None, None, None, None, None],
+        }
     }
 
     pub fn get_temperature(&self, day: Weekday) -> Option<i32> {
-        todo!()
+        self[day]
     }
 
     pub fn set_temperature(&mut self, day: Weekday, temperature: i32) {
-        todo!()
+        self[day] = Some(temperature)
     }
 }
 
