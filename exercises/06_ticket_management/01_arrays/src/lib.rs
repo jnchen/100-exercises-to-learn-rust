@@ -1,6 +1,6 @@
 // TODO: Flesh out the `WeekTemperatures` struct and its method implementations to pass the tests.
 
-use std::{num::Saturating, ops::{Index, IndexMut, SubAssign}};
+use std::ops::{Index, IndexMut};
 
 pub struct WeekTemperatures {
     temperatures: [Option<i32>; 7],
@@ -16,32 +16,28 @@ pub enum Weekday {
     Sunday,
 }
 
+fn weekday2usize(weekday: Weekday) -> usize{
+    match weekday{
+        Weekday::Monday => 0,
+        Weekday::Tuesday => 1,
+        Weekday::Wednesday => 2,
+        Weekday::Thursday => 3,
+        Weekday::Friday => 4,
+        Weekday::Saturday => 5,
+        Weekday::Sunday => 6
+    }
+}
+
 impl Index<Weekday> for WeekTemperatures{
     type Output = Option<i32>;
     fn index(&self, index: Weekday) -> &Self::Output {
-        match index{
-            Weekday::Monday => &self.temperatures[0],
-            Weekday::Tuesday => &self.temperatures[1],
-            Weekday::Wednesday => &self.temperatures[2],
-            Weekday::Thursday => &self.temperatures[3],
-            Weekday::Friday => &self.temperatures[4],
-            Weekday::Saturday => &self.temperatures[5],
-            Weekday::Sunday => &self.temperatures[6]
-        }
+        &self.temperatures[weekday2usize(index)]
     }
 }
 
 impl IndexMut<Weekday> for WeekTemperatures{
     fn index_mut(&mut self, index: Weekday) -> &mut Self::Output {
-        match index{
-            Weekday::Monday => &mut self.temperatures[0],
-            Weekday::Tuesday => &mut self.temperatures[1],
-            Weekday::Wednesday => &mut self.temperatures[2],
-            Weekday::Thursday => &mut self.temperatures[3],
-            Weekday::Friday => &mut self.temperatures[4],
-            Weekday::Saturday => &mut self.temperatures[5],
-            Weekday::Sunday => &mut self.temperatures[6]
-        }
+        &mut self.temperatures[weekday2usize(index)]
     }
 }
 
@@ -49,7 +45,7 @@ impl IndexMut<Weekday> for WeekTemperatures{
 impl WeekTemperatures {
     pub fn new() -> Self {
         WeekTemperatures {
-            temperatures: [None, None, None, None, None, None, None],
+            temperatures: [None;7],
         }
     }
 
