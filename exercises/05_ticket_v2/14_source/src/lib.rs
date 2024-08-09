@@ -26,7 +26,7 @@ pub enum TicketNewError {
     #[error("Description cannot be longer than 500 bytes")]
     DescriptionTooLong,
     #[error("{0}")]
-    StatusIsInvalid(#[from]ParseStatusError),
+    StatusIsInvalid(#[from]ParseStatusError), // #[from]可以自动生成将ParserStatusError转换为TicketNewError::StatusIsValid(ParserStatusError)的转换函数
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -52,7 +52,7 @@ impl Ticket {
         }
 
         // TODO: Parse the status string into a `Status` enum.
-        let new_status = Status::try_from(status)?;
+        let new_status: Status = Status::try_from(status)?;
         Ok(Ticket {
             title,
             description,
