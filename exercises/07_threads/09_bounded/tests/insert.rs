@@ -4,7 +4,7 @@ use ticket_fields::test_helpers::{ticket_description, ticket_title};
 
 #[test]
 fn works() {
-    let client = launch(5);
+    let client: bounded::TicketStoreClient = launch(5);
     let draft = TicketDraft {
         title: ticket_title(),
         description: ticket_description(),
