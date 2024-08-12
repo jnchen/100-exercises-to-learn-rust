@@ -6,10 +6,12 @@
 // You also need to add a `get` method that takes as input a `TicketId`
 // and returns an `Option<&Ticket>`.
 
+
 use ticket_fields::{TicketDescription, TicketTitle};
 
 #[derive(Clone)]
 pub struct TicketStore {
+    last_id: u64,
     tickets: Vec<Ticket>,
 }
 
@@ -40,12 +42,30 @@ pub enum Status {
 impl TicketStore {
     pub fn new() -> Self {
         Self {
+            last_id : 0,
             tickets: Vec::new(),
         }
     }
 
-    pub fn add_ticket(&mut self, ticket: Ticket) {
-        self.tickets.push(ticket);
+    pub fn add_ticket(&mut self, ticket: TicketDraft) -> TicketId{
+        let cur_id = self.last_id;
+        self.last_id = self.last_id + 1;
+        let ticket_id = TicketId(cur_id);
+        self.tickets.push(Ticket{
+            id: ticket_id,
+            title: ticket.title.into(),
+            description: ticket.description.into(),
+            status: Status::ToDo
+        });
+        ticket_id
+    }
+
+    pub fn get(&self, id: TicketId) -> Option<&Ticket>{
+        if id.0 as usize >= self.tickets.len(){
+            return None;
+        }
+
+        Some(&self.tickets[id.0 as usize])
     }
 }
 
