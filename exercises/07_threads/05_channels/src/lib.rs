@@ -1,11 +1,17 @@
 use std::sync::mpsc::{Receiver, Sender};
+use std::fmt::Display;
+
+use data::TicketDraft;
+use store::TicketStore;
 
 pub mod data;
 pub mod store;
 
+#[derive(Debug)]
 pub enum Command {
-    Insert(todo!()),
+    Insert(TicketDraft),
 }
+
 
 // Start the system by spawning the server the thread.
 // It returns a `Sender` instance which can then be used
@@ -20,4 +26,12 @@ pub fn launch() -> Sender<Command> {
 //  Enter a loop: wait for a command to show up in
 //  the channel, then execute it, then start waiting
 //  for the next command.
-pub fn server(receiver: Receiver<Command>) {}
+pub fn server(receiver: Receiver<Command>) {
+    let mut stores = TicketStore::new();
+    loop{
+        match receiver.recv(){
+            Ok(Command::Insert(data)) => {stores.add_ticket(data);},
+            _ => panic!("Caused error")
+        }
+    }
+}
